@@ -21,7 +21,7 @@ const getEthereumContract = () => {
 
 export const TransactionProvider = ({children}) => {
 
-    const [connectedAccount, setConnectedAccount] = useState("")
+    const [currentAccount, setCurrentAccount] = useState("")
     const checkIfWalletIsConnect = async () => {
         try {
           if (!ethereum) return alert("Please install MetaMask.");
@@ -29,7 +29,7 @@ export const TransactionProvider = ({children}) => {
           const accounts = await ethereum.request({ method: "eth_accounts" });
     
           if (accounts.length) {
-            setConnectedAccount(accounts[0]);
+            setCurrentAccount(accounts[0]);
     
             // getAllTransactions();
           } else {
@@ -40,22 +40,20 @@ export const TransactionProvider = ({children}) => {
         }
       };
 
-    const connectWallet = async () => {
+      const connectWallet = async () => {
         try {
-            if(!ethereum) alert("Please install MetaMask");
-            const accounts = await ethereum.request({method: "eth_requestAccounts"});
-            if(accounts.length){
-            setConnectedAccount(accounts[0]);
-             // getAllTransactions();
-            }else{
-               console.log("No accounts found");
-            }
+          if (!ethereum) return alert("Please install MetaMask.");
+    
+          const accounts = await ethereum.request({ method: "eth_requestAccounts", });
+    
+          setCurrentAccount(accounts[0]);
+          // window.location.reload();
         } catch (error) {
-            console.log(error);
-
-            throw new Error("No ethereum object.");
+          console.log(error);
+    
+          throw new Error("No ethereum object");
         }
-    }
+      };
 
     useEffect(() => {
 
@@ -63,7 +61,7 @@ export const TransactionProvider = ({children}) => {
     },[]);
 
     return (
-    <TransactionContext.Provider value={{ connectWallet }}>
+    <TransactionContext.Provider value={{ connectWallet,currentAccount }}>
         {children}  
     </TransactionContext.Provider>)
 }
