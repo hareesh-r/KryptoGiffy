@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const APIKEY = process.env.REACT_GIPHY_API;
+const APIKEY = process.env.REACT_APP_GIPHY_API;
 
 const useFetch = ({ keyword }) => {
   const [gifUrl, setGifUrl] = useState("");
@@ -11,8 +11,12 @@ const useFetch = ({ keyword }) => {
       const { data } = await response.json();
  
       setGifUrl(data[0]?.images?.downsized_medium.url);
+      if(!data[0]) {
+        setGifUrl(`https://media.giphy.com/media/cWqMkwMIobCA8/giphy.gif`);
+      }
+      console.log(keyword);
     } catch (error) {
-      setGifUrl("https://metro.co.uk/wp-content/uploads/2015/05/pokemon_crying.gif?quality=90&strip=all&zoom=1&resize=500%2C284");
+      setGifUrl(`https://metro.co.uk/wp-content/uploads/2015/05/pokemon_crying.gif?quality=90&strip=all&zoom=1&resize=500%2C284`);
     }
   };
 
