@@ -1,0 +1,5 @@
+npx hardhat run scripts/deploy.js --network goerli 
+
+Copy paste abi from amart_contracts/artifacts/contracts/Transactions.sol/Transactions.json to transaction.json file inside frontend 
+
+Also paste the logged address from the terminal to constants.js
