@@ -6,8 +6,23 @@ import useFetch from "../hooks/useFetch";
 import dummyData from "../utils/dummyData";
 import { shortenAddress } from "../utils/shortenAddress";
 
+const callPostRestAPI =(data)=> {
+  var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: JSON.stringify(data),
+};
+
+fetch("http://localhost:3001/addToBlockchain", requestOptions)
+  .then(response => response.json())
+  .then(result => console.log("post res",result))
+  .catch(error => console.log('error', error));
+}
+
 const TransactionsCard = ({ addressTo, addressFrom, timestamp, message, keyword, amount, url }) => {
-  const gifUrl = useFetch({ keyword });
+  const gifUrl = useFetch({ message });
 
   return (
     <div className="bg-[#181918] m-4 flex flex-1
@@ -27,10 +42,16 @@ const TransactionsCard = ({ addressTo, addressFrom, timestamp, message, keyword,
             <p className="text-white text-base">To: {shortenAddress(addressTo)}</p>
           </a>
           <p className="text-white text-base">Amount: {amount} ETH</p>
+          {keyword && (
+            <>
+              <br />
+              <p className="text-white text-base">Message: {keyword}</p>
+            </>
+          )}
           {message && (
             <>
               <br />
-              <p className="text-white text-base">Message: {message}</p>
+              <p className="text-white text-base">Keyword for Media : {message}</p>
             </>
           )}
         </div>
@@ -49,7 +70,7 @@ const TransactionsCard = ({ addressTo, addressFrom, timestamp, message, keyword,
 
 const Transactions = () => {
   const { transactions, currentAccount } = useContext(TransactionContext);
-
+  callPostRestAPI(transactions);
   return (
     <div className="flex w-full justify-center items-center 2xl:px-20 gradient-bg-transactions">
       <div className="flex flex-col md:p-12 py-12 px-4">
